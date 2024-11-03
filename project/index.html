@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天気予報</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="path/to/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Zen+Old+Mincho&display=swap" rel="stylesheet">
+    <script src="js/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather</h1>
+        <input type="text" id="city-input" placeholder="Type your city name here">
+        <button id="get-weather">Look UP</button>
+        <div id="weather-info"></div>
+    </div>
+    <img src="img/3275.png" alt="天気アイコン" class="icon">
+
+    <script>
+        document.getElementById('get-weather').addEventListener('click', function() {
+            const cityInput = document.getElementById('city-input').value;
+            const apiKey = '9ed015b51f003c1530f26f9b50a7b36b'; // ここにAPIキーを入力
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('City not found');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const weatherInfo = `
+                        <h2>Weather in ${data.name}</h2>
+                        <p>Temperature: ${data.main.temp} °C</p>
+                        <p>Weather: ${data.weather[0].description}</p>
+                    `;
+                    document.getElementById('weather-info').innerHTML = weatherInfo;
+                })
+                .catch(error => {
+                    document.getElementById('weather-info').innerHTML = `<p>${error.message}</p>`;
+                });
+        });
+    </script>
+</body>
+</html>
